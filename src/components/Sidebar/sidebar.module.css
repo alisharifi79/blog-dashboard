@@ -1,0 +1,9 @@
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #1C7CD5;
+}
+
+.active {
+  background-color: #4e90cf;
+}

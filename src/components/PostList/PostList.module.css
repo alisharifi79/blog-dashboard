@@ -1,0 +1,15 @@
+.container {
+}
+
+.heading {
+
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
+.table td {
+  color: #555;
+}

@@ -1,0 +1,17 @@
+.header {
+  height: 60px;
+  background-color: #373a3c;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 1.5rem;
+}
+
+.userSection {
+  font-size: 1rem;
+}
+
+button {
+  font-size: 0.875rem; 
+}

@@ -1,0 +1,8 @@
+.dropdownMenu {
+  z-index: 1050;
+  min-width: 120px;
+}
+
+.postRow:hover {
+  background-color: #f9f9f9;
+}
