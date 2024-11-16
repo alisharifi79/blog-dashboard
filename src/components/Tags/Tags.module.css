@@ -1,0 +1,18 @@
+.tagList {
+}
+
+.listItem {
+  border: none;
+  border-bottom: none;
+  padding: 0.5rem 0;
+  background-color: transparent;
+}
+
+.checkboxLabel {
+  font-weight: normal;
+  color: #333;
+}
+
+.checkboxLabel input:checked ~ .checkboxLabel {
+  color: #777;
+}

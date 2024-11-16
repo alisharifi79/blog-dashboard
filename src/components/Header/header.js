@@ -13,8 +13,8 @@ const Header = ({ username }) => {
             Welcome {username || "{username}"}
           </span>
         </div>
-        <div className={`d-flex align-items-center ${styles.userSection}`}>
-          <button className="btn btn-outline-light btn-sm">Logout</button>
+        <div className={`d-flex align-items-center me-3 ${styles.userSection}`}>
+          <button className="btn btn-outline-info btn-md">Logout</button>
         </div>
       </div>
     </header>

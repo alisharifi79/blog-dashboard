@@ -1,0 +1,50 @@
+.modalHeader {
+
+}
+
+.modalTitle {
+  font-weight: bold;
+  color: #373a3c;
+  font-size: 1.25rem;
+}
+
+.modalBody {
+  font-size: 1rem;
+  padding: 1.5rem;
+  padding-bottom: 2.5rem;
+  text-align: start;
+  color: #373a3c;
+}
+
+.modalFooter {
+  justify-content: end;
+  padding: 1rem;
+}
+
+.cancelButton {
+  background-color: #ffffff;
+  color: #5a5a5a;
+  width: 70px;
+  margin-right: 10px;
+  border: solid 1px #dddddd;
+}
+
+.deleteButton {
+  background-color: #cb2e25;
+  color: white;
+  width: 70px;
+  border: solid 1px #d9534f;
+}
+
+.cancelButton:hover{
+  background-color: #f7f7f7;
+  color: #5a5a5a;
+  border: solid 1px #dddddd;
+  opacity: 0.9;
+}
+
+.deleteButton:hover {
+  background-color: #e05362;
+  border: solid 1px #d9534f;
+  opacity: 0.9;
+}

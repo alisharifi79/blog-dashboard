@@ -3,6 +3,7 @@
   min-width: 120px;
 }
 
-.postRow:hover {
-  background-color: #f9f9f9;
+.dropdownButton {
+  color: white;
+  background-color: #5bc0de;
 }
