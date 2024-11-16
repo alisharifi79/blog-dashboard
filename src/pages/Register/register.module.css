@@ -1,0 +1,19 @@
+.card {
+  background-color: #eceeef;
+  border-radius: 8px;
+  width: 100%;
+  width: 450px;
+}
+
+.header {
+  color: #707070 !important;
+  height: 55px;
+  font-size: 47px;  
+  font-family: HelveticaNeue;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.19;
+  letter-spacing: normal;
+  color: var(--warm-grey);
+}

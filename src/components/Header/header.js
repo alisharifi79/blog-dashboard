@@ -1,7 +1,14 @@
 import React from "react";
 import styles from "./Header.module.css";
+import { useNavigate } from "react-router-dom";
 
 const Header = ({ username }) => {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    // localStorage.removeItem("authToken");
+    navigate("/login");
+  };
+
   return (
     <header className={`navbar bg-dark ${styles.header}`}>
       <div className="container-fluid">
@@ -14,7 +21,12 @@ const Header = ({ username }) => {
           </span>
         </div>
         <div className={`d-flex align-items-center me-3 ${styles.userSection}`}>
-          <button className="btn btn-outline-info btn-md">Logout</button>
+          <button
+            className="btn btn-outline-info btn-md"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
         </div>
       </div>
     </header>

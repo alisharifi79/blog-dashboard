@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./Post.module.css";
 import DeleteModal from "../DeleteModal/DeleteModal";
 
-const Post = ({ post, index }) => {
+const Post = ({ post, index, showToast }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -21,6 +21,7 @@ const Post = ({ post, index }) => {
 
   const handleDeleteConfirm = () => {
     console.log("Post deleted:", post.title);
+    showToast("Article deleted successfully", "success");
     setShowDeleteModal(false);
   };
 
@@ -60,10 +61,7 @@ const Post = ({ post, index }) => {
                   </button>
                 </li>
                 <li>
-                  <button
-                    className="dropdown-item"
-                    onClick={handleDeleteClick}
-                  >
+                  <button className="dropdown-item" onClick={handleDeleteClick}>
                     Delete
                   </button>
                 </li>

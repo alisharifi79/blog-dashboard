@@ -1,0 +1,27 @@
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: max-content;
+  height: 49px;
+  z-index: 1050;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.success {
+  background-color: #e2eed8;
+  color: var(--military-green);
+  border: 1px solid var(--light-grey-green);
+}
+
+.error {
+  background-color: #efdfdf;
+  color: #9f4f48;
+  border: solid 1px var(--pinkish-grey);
+}
+
+.closeButton {
+  cursor: pointer;
+  padding: 0;
+}

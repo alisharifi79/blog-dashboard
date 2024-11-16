@@ -2,11 +2,19 @@ import React, { useEffect, useState } from "react";
 import Post from "../Post/Post";
 import styles from "./PostList.module.css";
 import { Pagination } from "react-bootstrap";
+import MyToast from "../MyToast/MyToast";
 
 const PostList = ({ posts }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [currentPosts, setCurrentPosts] = useState([]);
+  const [toast, setToast] = useState({
+    visible: false,
+    title: "",
+    message: "",
+    type: "",
+  });
+
   const postsPerPage = 10;
 
   useEffect(() => {
@@ -23,6 +31,18 @@ const PostList = ({ posts }) => {
     setCurrentPosts(
       posts.slice((page - 1) * postsPerPage, page * postsPerPage)
     );
+  };
+
+  const showToast = (message, type) => {
+    setToast({
+      visible: true,
+      message: message,
+      type: type,
+    });
+
+    setTimeout(() => {
+      setToast({ ...toast, visible: false });
+    }, 3000);
   };
 
   return (
@@ -58,11 +78,22 @@ const PostList = ({ posts }) => {
                 key={post.id}
                 post={post}
                 index={index + indexOfFirstPost + 1}
+                showToast={showToast}
               />
             ))
           )}
         </tbody>
       </table>
+      {toast.visible && (
+        <div className="position-fixed bottom-0 end-0 p-3">
+          <MyToast
+            title=""
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast({ ...toast, visible: false })}
+          />
+        </div>
+      )}
       <Pagination className="d-flex justify-content-center mt-4">
         <Pagination.Prev
           onClick={() => handlePageChange(currentPage - 1)}
