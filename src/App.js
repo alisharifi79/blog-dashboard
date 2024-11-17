@@ -6,7 +6,10 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import NewArticle from "./pages/NewArticle/NewArticle";
-import { useAuth } from "./context/AuthContext.js";
+import { useAuth } from "./context/AuthContext";
+import "./App.css";
+import EditArticle from "./pages/EditArticle/EditArticle";
+import { ToastProvider } from "./context/ToastContext";
 
 const MainLayout = ({ children }) => {
   const { auth } = useAuth();
@@ -16,7 +19,7 @@ const MainLayout = ({ children }) => {
       <Header username={auth.user?.username} />
       <div className="d-flex">
         <Sidebar />
-        <main className="flex-grow-1 p-3">{children}</main>
+        <main className="flex-grow-1 p-3 main-container">{children}</main>
       </div>
     </>
   );
@@ -30,45 +33,55 @@ const AuthLayout = ({ children }) => (
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Auth Pages */}
-        <Route
-          path="/login"
-          element={
-            <AuthLayout>
-              <Login />
-            </AuthLayout>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <AuthLayout>
-              <Register />
-            </AuthLayout>
-          }
-        />
+    <ToastProvider>
+      <Router>
+        <Routes>
+          {/* Auth Pages */}
+          <Route
+            path="/login"
+            element={
+              <AuthLayout>
+                <Login />
+              </AuthLayout>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <AuthLayout>
+                <Register />
+              </AuthLayout>
+            }
+          />
 
-        {/* Main Pages */}
-        <Route
-          path="/"
-          element={
-            <MainLayout>
-              <Dashboard />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/new-article"
-          element={
-            <MainLayout>
-              <NewArticle />
-            </MainLayout>
-          }
-        />
-      </Routes>
-    </Router>
+          {/* Main Pages */}
+          <Route
+            path="/"
+            element={
+              <MainLayout>
+                <Dashboard />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/new-article"
+            element={
+              <MainLayout>
+                <NewArticle />
+              </MainLayout>
+            }
+          />
+          <Route
+            path="/edit-article/:slug"
+            element={
+              <MainLayout>
+                <EditArticle />
+              </MainLayout>
+            }
+          />
+        </Routes>
+      </Router>
+    </ToastProvider>
   );
 }
 

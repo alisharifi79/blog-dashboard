@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import styles from "./NewArticle.module.css";
+import React, { useEffect, useState } from "react";
+import styles from "./EditArticle.module.css";
 import Tags from "../../components/Tags/Tags";
 import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useToast } from "../../context/ToastContext";
 
-function NewArticle() {
+function EditArticle() {
+  const { state } = useLocation();
+  const { post } = state || {};
   const [selectedTags, setSelectedTags] = useState([]);
   const [error, setError] = useState("");
   const { showToast } = useToast();
@@ -17,6 +19,17 @@ function NewArticle() {
     body: "",
   });
   const token = auth.token;
+
+  useEffect(() => {
+    if (post) {
+      setFormData({
+        title: post.title,
+        description: post.description,
+        body: post.body,
+      });
+      setSelectedTags(post.tagList || []);
+    }
+  }, [post]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,11 +53,11 @@ function NewArticle() {
     };
 
     const baseUrl = "http://5.34.201.164:3000/api";
-    const url = `${baseUrl}/articles`;
+    const url = `${baseUrl}/articles/${post.slug}`;
 
     try {
       const response = await fetch(url, {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Token ${token}`,
@@ -54,25 +67,25 @@ function NewArticle() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create article");
+        throw new Error(errorData.message || "Failed to update article");
       }
 
-      showToast("Well done!", "Article created successfully", "success");
+      showToast("Well done!", "Article updated successfully", "success");
 
       navigate("/");
     } catch (error) {
       showToast(
         "Error",
-        "Failed to create article. Please try again.",
+        "Failed to update article. Please try again.",
         "error"
       );
-      setError("Failed to create article. Please try again.");
+      setError("Failed to update article. Please try again.");
     }
   };
 
   return (
-    <div className={`container mt-4 px-4 ${styles.newArticle}`}>
-      <h1 className={`text-start ${styles.title}`}>New Article</h1>
+    <div className={`container mt-4 px-4 ${styles.editArticle}`}>
+      <h1 className={`text-start ${styles.title}`}>Edit Article</h1>
       <div className="d-inline-flex col-12">
         <form onSubmit={handleSubmit} className="col-9 py-4 bg-white">
           <div className="mb-3">
@@ -139,4 +152,4 @@ function NewArticle() {
   );
 }
 
-export default NewArticle;
+export default EditArticle;

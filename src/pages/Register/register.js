@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Register.module.css";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext.js";
+import { useAuth } from "../../context/AuthContext";
+import { useToast } from "../../context/ToastContext";
 
 const Register = () => {
   const { login, auth } = useAuth();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { showToast } = useToast();
+  const navigate = useNavigate();
   const [errors, setErrors] = useState({
     username: "",
     email: "",
     password: "",
   });
-  const navigate = useNavigate();
 
   const validateForm = () => {
     let valid = true;
@@ -64,8 +66,13 @@ const Register = () => {
 
         if (!response.ok) {
           const errorData = await response.json();
-          console.error("Registration error:", errorData);
-          setErrors({ ...errors, general: "Registration failed" });
+          showToast(
+            "Registration Failed",
+            errorData.errors
+              ? Object.values(errorData.errors).join(", ")
+              : "Invalid registration details",
+            "error"
+          );
           return;
         }
 
@@ -73,14 +80,13 @@ const Register = () => {
 
         if (data?.user && data.user.token) {
           login(data.user, data.user.token);
+          showToast("Registration Successful!", "Welcome to the platform!", "success");
           navigate("/");
         } else {
-          console.error("Invalid response structure:", data);
-          setErrors({ ...errors, general: "Invalid response from server" });
+          showToast("Error", "Invalid response from server.", "error");
         }
       } catch (error) {
-        console.error("Error during registration:", error.message);
-        setErrors({ ...errors, general: "Network or server error" });
+        showToast("Error", "Network or server error. Please try again.", "error");
       }
     }
   };

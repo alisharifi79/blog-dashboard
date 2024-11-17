@@ -1,0 +1,30 @@
+.main-container {
+  padding-left: 250px !important;
+  padding-top: 60px !important;
+}
+
+.toast-container .toast {
+  animation: fadeIn 0.5s ease-out, fadeOut 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
