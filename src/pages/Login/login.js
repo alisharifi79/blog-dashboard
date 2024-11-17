@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Login.module.css";
-import MyToast from "../../components/MyToast/MyToast";
-import { useAuth } from "../../context/AuthContext.js";
+import { useToast } from "../../context/ToastContext";
+import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -9,12 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
-  const [toast, setToast] = useState({
-    visible: false,
-    title: "",
-    message: "",
-    type: "",
-  });
+  const { showToast } = useToast();
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -58,44 +53,37 @@ const Login = () => {
 
         if (!response.ok) {
           const errorData = await response.json();
-          setToast({
-            visible: true,
-            title: "Login Failed!",
-            message: errorData.errors
+          showToast(
+            "Login Failed!",
+            errorData.errors
               ? Object.values(errorData.errors).join(", ")
               : "Invalid credentials",
-            type: "error",
-          });
+            "error"
+          );
           return;
         }
 
         const data = await response.json();
-        login(data.user, data.user.token);
-        setToast({
-          visible: true,
-          title: "Login Successful!",
-          message: "Welcome back!",
-          type: "success",
-        });
 
-        setTimeout(() => {
+        if (data?.user && data.user.token) {
+          login(data.user, data.user.token);
+          showToast("Login Successful!", "Welcome back!", "success");
           navigate("/");
-        }, 1500);
+        } else {
+          showToast(
+            "Login Failed!",
+            "Username and/or Password is invalid",
+            "error"
+          );
+        }
       } catch (error) {
-        console.error("Error during login:", error);
-        setToast({
-          visible: true,
-          title: "Error!",
-          message: "An error occurred while logging in. Please try again.",
-          type: "error",
-        });
+        showToast(
+          "Error!",
+          "An error occurred while logging in. Please try again.",
+          "error"
+        );
       }
     }
-
-    setTimeout(
-      () => setToast({ visible: false, title: "", message: "", type: "" }),
-      3000
-    );
   };
 
   useEffect(() => {
@@ -155,16 +143,6 @@ const Login = () => {
           </p>
         </div>
       </div>
-      {toast.visible && (
-        <MyToast
-          title={toast.title}
-          message={toast.message}
-          type={toast.type}
-          onClose={() =>
-            setToast({ title: "", visible: false, message: "", type: "" })
-          }
-        />
-      )}
     </div>
   );
 };

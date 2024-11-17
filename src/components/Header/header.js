@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Header.module.css";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext.js";
+import { useAuth } from "../../context/AuthContext";
 
 const Header = ({ username }) => {
   const { logout } = useAuth();

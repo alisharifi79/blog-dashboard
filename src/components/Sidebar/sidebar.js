@@ -5,7 +5,7 @@ import styles from './Sidebar.module.css';
 const Sidebar = () => {
   return (
     <aside className={`${styles.sidebar} d-flex flex-column py-2`}>
-      <span className="text-white fs-3 mb-4 mt-4 px-3">Post</span>
+      <span className="text-white fs-3 mb-4 mt-1 px-3">Post</span>
       <nav>
         <ul className="list-unstyled">
           <li className="mb-3">

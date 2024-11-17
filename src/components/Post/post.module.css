@@ -1,6 +1,7 @@
 .dropdownMenu {
   z-index: 1050;
   min-width: 120px;
+  right: 0;
 }
 
 .dropdownButton {
