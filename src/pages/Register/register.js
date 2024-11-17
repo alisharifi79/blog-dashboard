@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Register.module.css";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext.js";
 
 const Register = () => {
+  const { login, auth } = useAuth();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -10,6 +13,7 @@ const Register = () => {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const validateForm = () => {
     let valid = true;
@@ -34,16 +38,58 @@ const Register = () => {
     return valid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (validateForm()) {
-      console.log("Form submitted successfully:", {
-        username,
-        email,
-        password,
-      });
+      const userData = {
+        user: {
+          email,
+          password,
+          username,
+        },
+      };
+
+      try {
+        const baseUrl = "http://5.34.201.164:3000/api";
+        const url = `${baseUrl}/users`;
+
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Registration error:", errorData);
+          setErrors({ ...errors, general: "Registration failed" });
+          return;
+        }
+
+        const data = await response.json();
+
+        if (data?.user && data.user.token) {
+          login(data.user, data.user.token);
+          navigate("/");
+        } else {
+          console.error("Invalid response structure:", data);
+          setErrors({ ...errors, general: "Invalid response from server" });
+        }
+      } catch (error) {
+        console.error("Error during registration:", error.message);
+        setErrors({ ...errors, general: "Network or server error" });
+      }
     }
   };
+
+  useEffect(() => {
+    if (auth.token && auth.user) {
+      navigate("/");
+    }
+  }, [auth, navigate]);
 
   return (
     <div className={`d-flex justify-content-center align-items-center vh-100`}>

@@ -6,16 +6,21 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import NewArticle from "./pages/NewArticle/NewArticle";
+import { useAuth } from "./context/AuthContext.js";
 
-const MainLayout = ({ children, username }) => (
-  <>
-    <Header username={username} />
-    <div className="d-flex">
-      <Sidebar />
-      <main className="flex-grow-1 p-3">{children}</main>
-    </div>
-  </>
-);
+const MainLayout = ({ children }) => {
+  const { auth } = useAuth();
+
+  return (
+    <>
+      <Header username={auth.user?.username} />
+      <div className="d-flex">
+        <Sidebar />
+        <main className="flex-grow-1 p-3">{children}</main>
+      </div>
+    </>
+  );
+};
 
 const AuthLayout = ({ children }) => (
   <main className="vh-100 d-flex align-items-center justify-content-center bg-white">
@@ -24,8 +29,6 @@ const AuthLayout = ({ children }) => (
 );
 
 function App() {
-  const username = "John Doe";
-
   return (
     <Router>
       <Routes>
@@ -51,7 +54,7 @@ function App() {
         <Route
           path="/"
           element={
-            <MainLayout username={username}>
+            <MainLayout>
               <Dashboard />
             </MainLayout>
           }
@@ -59,7 +62,7 @@ function App() {
         <Route
           path="/new-article"
           element={
-            <MainLayout username={username}>
+            <MainLayout>
               <NewArticle />
             </MainLayout>
           }

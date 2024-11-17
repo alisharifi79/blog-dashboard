@@ -1,11 +1,13 @@
 import React from "react";
 import styles from "./Header.module.css";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext.js";
 
 const Header = ({ username }) => {
+  const { logout } = useAuth();
   const navigate = useNavigate();
   const handleLogout = () => {
-    // localStorage.removeItem("authToken");
+    logout()
     navigate("/login");
   };
 

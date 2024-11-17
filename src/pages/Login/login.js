@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Login.module.css";
 import MyToast from "../../components/MyToast/MyToast";
+import { useAuth } from "../../context/AuthContext.js";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const { login, auth } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
@@ -12,6 +15,7 @@ const Login = () => {
     message: "",
     type: "",
   });
+  const navigate = useNavigate();
 
   const validateForm = () => {
     let valid = true;
@@ -31,31 +35,74 @@ const Login = () => {
     return valid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (validateForm()) {
-      if (email === "test@example.com" && password === "password") {
+      const userData = {
+        user: {
+          email,
+          password,
+        },
+      };
+
+      try {
+        const baseUrl = "http://5.34.201.164:3000/api";
+        const response = await fetch(`${baseUrl}/users/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          setToast({
+            visible: true,
+            title: "Login Failed!",
+            message: errorData.errors
+              ? Object.values(errorData.errors).join(", ")
+              : "Invalid credentials",
+            type: "error",
+          });
+          return;
+        }
+
+        const data = await response.json();
+        login(data.user, data.user.token);
         setToast({
           visible: true,
           title: "Login Successful!",
           message: "Welcome back!",
           type: "success",
         });
-      } else {
+
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
+      } catch (error) {
+        console.error("Error during login:", error);
         setToast({
           visible: true,
-          title: "Login Failed!",
-          message: "Username and/or Password is invalid",
+          title: "Error!",
+          message: "An error occurred while logging in. Please try again.",
           type: "error",
         });
       }
-
-      setTimeout(
-        () => setToast({ visible: false, title: "", message: "", type: "" }),
-        3000
-      );
     }
+
+    setTimeout(
+      () => setToast({ visible: false, title: "", message: "", type: "" }),
+      3000
+    );
   };
+
+  useEffect(() => {
+    if (auth.token && auth.user) {
+      navigate("/");
+    }
+  }, [auth, navigate]);
 
   return (
     <div className={`d-flex justify-content-center align-items-center vh-100`}>
