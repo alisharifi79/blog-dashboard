@@ -94,7 +94,7 @@ const Login = () => {
 
   return (
     <div className={`d-flex justify-content-center align-items-center vh-100`}>
-      <div className={`p-5 shadow-sm ${styles.card}`}>
+      <div className={`py-5 px-4 shadow-sm ${styles.card}`}>
         <h2 className={`text-center mb-4 ${styles.header}`}>LOGIN</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
@@ -131,7 +131,7 @@ const Login = () => {
             Login
           </button>
         </form>
-        <div className="text-center mt-3">
+        <div className="text-start mt-3">
           <p className="mb-0">
             Don’t have an account?{" "}
             <a

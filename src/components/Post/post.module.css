@@ -1,10 +1,49 @@
 .dropdownMenu {
   z-index: 1050;
-  min-width: 120px;
+  min-width: 175px;
   right: 0;
 }
 
 .dropdownButton {
   color: white;
   background-color: #5bc0de;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  background-color: #fff;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.excerpt {
+  color: #55595c;
+}
+
+.card h4 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.card .actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+  .dropdown-menu {
+    min-width: none;
+    width: auto;
+  }
+
+  .tableLayout {
+    display: none;
+  }
+
+  .cardLayout {
+    display: flex;
+    flex-direction: column;
+  }
 }

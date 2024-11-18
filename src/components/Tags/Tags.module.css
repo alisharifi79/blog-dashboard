@@ -18,3 +18,23 @@
 .checkboxLabel input:checked ~ .checkboxLabel {
   color: #777;
 }
+
+@media (max-width: 768px) {
+  .tagList {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-height: none;
+    overflow-y: visible;
+    gap: 8px;
+  }
+
+  .listItem {
+    width: max-content;
+    flex: 0 1 auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+  }
+}

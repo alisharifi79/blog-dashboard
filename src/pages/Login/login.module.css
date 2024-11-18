@@ -17,3 +17,9 @@
   letter-spacing: normal;
   color: var(--warm-grey);
 }
+
+@media (max-width: 768px) {
+  .card {
+    width: 350px;
+  }
+}

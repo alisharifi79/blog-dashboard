@@ -4,7 +4,7 @@
   position: fixed;
   top: 0;
   z-index: 1001;
-  background-color: #373a3c;
+  background-color: var(--text-gray);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -12,10 +12,60 @@
   font-size: 1.5rem;
 }
 
-.userSection {
-  font-size: 1rem;
+.logoutIcon {
+  display: none !important;
+}
+
+.logoutText {
+  display: block !important;
 }
 
 button {
   font-size: 0.875rem; 
+}
+
+@media (max-width: 768px) {
+  .title{
+    margin-left: 40px !important;
+    margin-bottom: 5px !important;
+    font-size: 1.2rem;
+  }
+  .welcomeText {
+    font-size: 0.9rem;
+    margin-right: 0 !important;
+    margin-left: 1.5rem !important;
+  }
+
+  .userSection {
+    margin-right: 0 !important;
+  }
+
+  .logoutIcon {
+    display: block !important;
+  }
+
+  .logoutText {
+    display: none !important;
+  }
+
+  .userSection button{
+    font-size: 18px;
+    border: none;
+    padding: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .welcomeText {
+    margin-left: 0 !important;
+  }
+}
+
+@media (max-width: 320px) {
+  .title {
+    font-size: smaller;
+  }
+  .welcomeText {
+    font-size: x-small;
+  }
 }

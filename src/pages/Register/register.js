@@ -80,13 +80,21 @@ const Register = () => {
 
         if (data?.user && data.user.token) {
           login(data.user, data.user.token);
-          showToast("Registration Successful!", "Welcome to the platform!", "success");
+          showToast(
+            "Registration Successful!",
+            "Welcome to the platform!",
+            "success"
+          );
           navigate("/");
         } else {
           showToast("Error", "Invalid response from server.", "error");
         }
       } catch (error) {
-        showToast("Error", "Network or server error. Please try again.", "error");
+        showToast(
+          "Error",
+          "Network or server error. Please try again.",
+          "error"
+        );
       }
     }
   };
@@ -99,7 +107,7 @@ const Register = () => {
 
   return (
     <div className={`d-flex justify-content-center align-items-center vh-100`}>
-      <div className={`p-5 shadow-sm ${styles.card}`}>
+      <div className={`py-5 px-4 shadow-sm ${styles.card}`}>
         <h2 className={`text-center mb-4 ${styles.header}`}>Register</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
@@ -151,7 +159,7 @@ const Register = () => {
             Register
           </button>
         </form>
-        <div className="text-center mt-3">
+        <div className="text-start mt-3">
           <p className="mb-0">
             Already have an account?{" "}
             <a href="/login" className="text-gray fw-bold text-decoration-none">

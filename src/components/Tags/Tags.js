@@ -1,57 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Tags.module.css";
-import MyToast from "../MyToast/MyToast";
+import { useToast } from "../../context/ToastContext";
 
 const Tags = ({ selectedTags, setSelectedTags }) => {
   const [availableTags, setAvailableTags] = useState([]);
   const [newTag, setNewTag] = useState("");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [toast, setToast] = useState({
-    visible: false,
-    title: "",
-    message: "",
-    type: "",
-  });
-
-  const fetchTags = async () => {
-    setLoading(true);
-    setError(null);
-
-    const baseUrl = "http://5.34.201.164:3000/api";
-    const url = `${baseUrl}/tags`;
-
-    try {
-      const response = await fetch(url, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch tags: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      setAvailableTags(data.tags.sort() || []);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const showToast = (message, type) => {
-    setToast({
-      visible: true,
-      message: message,
-      type: type,
-    });
-
-    setTimeout(() => {
-      setToast({ ...toast, visible: false });
-    }, 3000);
-  };
+  const { showToast } = useToast();
 
   const addNewTag = () => {
     if (newTag.trim() && !availableTags.includes(newTag)) {
@@ -60,7 +15,7 @@ const Tags = ({ selectedTags, setSelectedTags }) => {
       setSelectedTags([...selectedTags, newTag]);
       setNewTag("");
     } else {
-      showToast("Tag already exist!", "error");
+      showToast("Error!", "Tag already exist", "error");
     }
   };
 
@@ -73,8 +28,33 @@ const Tags = ({ selectedTags, setSelectedTags }) => {
   };
 
   useEffect(() => {
+    const fetchTags = async () => {
+      setLoading(true);
+
+      const baseUrl = "http://5.34.201.164:3000/api";
+      const url = `${baseUrl}/tags`;
+
+      try {
+        const response = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch tags: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setAvailableTags(data.tags.sort() || []);
+      } catch (error) {
+        showToast("Error", error.message || "Failed to fetch tags", "error");
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchTags();
-  }, []);
+  }, [showToast]);
 
   return (
     <div className={`${styles.tagsContainer}`}>
@@ -97,13 +77,8 @@ const Tags = ({ selectedTags, setSelectedTags }) => {
         </button>
       </div>
       <div className={`list-group border shadow-sm p-2 ${styles.tagList}`}>
-        {error && (
-          <div className="alert alert-danger" role="alert">
-            {error}
-          </div>
-        )}
         {loading ? (
-          <div className="d-flex justify-content-center align-items-center p-3">
+          <div className="d-flex col-12 justify-content-center align-items-center p-3">
             <span className="spinner-border text-primary me-2" role="status" />
           </div>
         ) : (
@@ -120,16 +95,6 @@ const Tags = ({ selectedTags, setSelectedTags }) => {
           ))
         )}
       </div>
-      {toast.visible && (
-        <div className="position-fixed bottom-0 end-0 p-3">
-          <MyToast
-            title=""
-            message={toast.message}
-            type={toast.type}
-            onClose={() => setToast({ ...toast, visible: false })}
-          />
-        </div>
-      )}
     </div>
   );
 };

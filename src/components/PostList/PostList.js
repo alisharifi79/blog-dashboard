@@ -8,7 +8,6 @@ import { useAuth } from "../../context/AuthContext";
 const PostList = () => {
   const { auth } = useAuth();
   const [posts, setPosts] = useState([]);
-  const [currentPosts, setCurrentPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { showToast } = useToast();
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,11 +19,9 @@ const PostList = () => {
   const fetchPosts = useCallback(async () => {
     setLoading(true);
 
-    const baseUrl = "http://5.34.201.164:3000/api";
-    const url =
-      currentPage === 1
-        ? `${baseUrl}/articles`
-        : `${baseUrl}/articles/page/${currentPage}`;
+    const baseUrl = "http://5.34.201.164:3000/api/articles";
+    const offset = (currentPage - 1) * postsPerPage;
+    const url = `${baseUrl}?limit=${postsPerPage}&offset=${offset}`;
 
     try {
       const response = await fetch(url, {
@@ -39,8 +36,9 @@ const PostList = () => {
       }
 
       const data = await response.json();
+
       setPosts(data.articles || []);
-      setTotalPosts(data.articlesCount);
+      setTotalPosts(data.articlesCount || 0);
     } catch (error) {
       showToast("Error", error.message || "Failed to fetch posts", "error");
     } finally {
@@ -53,12 +51,6 @@ const PostList = () => {
     fetchPosts();
   }, [fetchPosts]);
 
-  useEffect(() => {
-    const startIdx = (currentPage - 1) * postsPerPage;
-    const endIdx = startIdx + postsPerPage;
-    setCurrentPosts(posts.slice(startIdx, endIdx));
-  }, [posts, currentPage]);
-
   const totalPages = Math.max(1, Math.ceil(totalPosts / postsPerPage));
 
   const handlePageChange = (page) => {
@@ -68,51 +60,74 @@ const PostList = () => {
   };
 
   return (
-    <div className={`${styles.container} bg-white p-4 pe-2`}>
+    <div className={`${styles.container} bg-white py-4 px-2`}>
       <h2 className="fs-1 mb-4 text-dark">All Posts</h2>
-      <table className="table table-hover">
-        <thead className={`${styles.thead} table-light`}>
-          <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Tags</th>
-            <th>Excerpt</th>
-            <th>Created</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {loading ? (
+      <div className={styles.tableLayout}>
+        <table className="table table-hover">
+          <thead className={`${styles.thead} table-light`}>
             <tr>
-              <td colSpan="7" className="text-center p-3">
-                <div className="d-flex justify-content-center align-items-center">
-                  <span
-                    className="spinner-border text-primary me-2"
-                    role="status"
-                  />
-                </div>
-              </td>
+              <th>#</th>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Tags</th>
+              <th>Excerpt</th>
+              <th>Created</th>
+              <th>Actions</th>
             </tr>
-          ) : currentPosts.length === 0 ? (
-            <tr>
-              <td colSpan="7" className="text-center p-3">
-                No posts available.
-              </td>
-            </tr>
-          ) : (
-            currentPosts.map((post, index) => (
-              <Post
-                key={post.slug}
-                post={post}
-                index={index + 1 + (currentPage - 1) * postsPerPage}
-                showToast={showToast}
-                onDelete={fetchPosts}
-              />
-            ))
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan="7" className="text-center p-3">
+                  <div className="d-flex justify-content-center align-items-center">
+                    <span
+                      className="spinner-border text-primary me-2"
+                      role="status"
+                    />
+                  </div>
+                </td>
+              </tr>
+            ) : posts.length === 0 ? (
+              <tr>
+                <td colSpan="7" className="text-center p-3">
+                  No posts available.
+                </td>
+              </tr>
+            ) : (
+              posts.map((post, index) => (
+                <Post
+                  key={post.slug}
+                  post={post}
+                  index={index + 1 + (currentPage - 1) * postsPerPage}
+                  showToast={showToast}
+                  onDelete={fetchPosts}
+                  viewMode="table"
+                />
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+      <div className={styles.cardLayout}>
+        {loading ? (
+          <div className="text-center p-3">
+            <span className="spinner-border text-primary" role="status" />
+          </div>
+        ) : posts.length === 0 ? (
+          <p className="text-center">No posts available.</p>
+        ) : (
+          posts.map((post, index) => (
+            <Post
+              key={post.slug}
+              post={post}
+              index={index + 1 + (currentPage - 1) * postsPerPage}
+              showToast={showToast}
+              onDelete={fetchPosts}
+              viewMode="card"
+            />
+          ))
+        )}
+      </div>
       {posts.length > 0 && (
         <Pagination className="d-flex justify-content-center mt-4">
           <Pagination.Prev

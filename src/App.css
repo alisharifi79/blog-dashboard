@@ -3,7 +3,7 @@
   padding-top: 60px !important;
 }
 
-.toast-container .toast {
+.toast-container {
   animation: fadeIn 0.5s ease-out, fadeOut 0.5s ease-in;
 }
 
@@ -26,5 +26,11 @@
   to {
     opacity: 0;
     transform: translateY(20px);
+  }
+}
+
+@media (max-width: 768px) {
+  .main-container {
+    padding-left: 1rem !important;
   }
 }

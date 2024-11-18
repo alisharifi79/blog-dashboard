@@ -1,6 +1,7 @@
 .container {
   margin: auto;
   width: 100%;
+  max-width: 1200px;
 }
 
 .table-hover tbody tr:hover {
@@ -15,8 +16,9 @@
   background-color: #eceeef;
 }
 
-.thead th{
+.thead th {
   background-color: #eceeef;
+  color: #55595c;
 }
 
 .table th,
@@ -26,4 +28,28 @@
 
 .table td {
   color: #555;
+}
+
+.tableLayout {
+  display: block;
+}
+
+.cardLayout {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: 1.5rem !important;
+  }
+}
+@media (max-width: 768px) {
+  .tableLayout {
+    display: none;
+  }
+
+  .cardLayout {
+    display: flex;
+    flex-direction: column;
+  }
 }
